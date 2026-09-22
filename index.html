@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade 9 Math: Linear Relations & Systems Exam Mastery</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX for crisp Math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInBody(document.body);"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              900: '#0c4a6e',
+            },
+            accent: {
+              emerald: '#10b981',
+              amber: '#f59e0b',
+              rose: '#f43f5e',
+              violet: '#8b5cf6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .math-font { font-family: 'KaTeX_Main', serif; }
+    .glass { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(8px); }
+    .grid-bg {
+      background-size: 20px 20px;
+      background-image: linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+                        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP NAVIGATION / HEADER -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md">
+          📐
+        </div>
+        <div>
+          <h1 class="font-bold text-slate-900 leading-tight text-lg">Grade 9 Linear Mastery & Exam Lab</h1>
+          <p class="text-xs text-slate-500">Curriculum-Aligned • Practice, Anchor & Test</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center space-x-3">
+        <!-- Timer Widget -->
+        <div id="timerContainer" class="hidden sm:flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-300">
+          <svg class="w-4 h-4 text-brand-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-width="2"></circle>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l4 2"></path>
+          </svg>
+          <span id="timerDisplay" class="font-mono font-bold text-slate-700 text-sm">60:00</span>
+          <button id="pauseTimerBtn" onclick="toggleTimer()" class="text-xs font-semibold px-1.5 py-0.5 rounded bg-white hover:bg-slate-200 border text-slate-600 transition">Pause</button>
+        </div>
+
+        <!-- Cheat Sheet Toggle -->
+        <button onclick="toggleModal('cheatSheetModal')" class="flex items-center space-x-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-lg text-sm font-semibold transition">
+          <span>📖</span>
+          <span>Process Cheat Sheet</span>
+        </button>
+
+        <!-- New Session Generator -->
+        <button onclick="startNewSession()" class="flex items-center space-x-1.5 bg-brand-600 hover:bg-brand-700 text-white px-3.5 py-1.5 rounded-lg text-sm font-semibold shadow-sm transition">
+          <span>🔄 New Random Session</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col gap-6">
+
+    <!-- OVERVIEW & STATS BAR -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Exam Progress</div>
+          <div class="text-xl font-extrabold text-slate-800" id="progressText">Question 1 / 10</div>
+        </div>
+        <div class="text-2xl">📝</div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Current Score</div>
+          <div class="text-xl font-extrabold text-brand-600" id="scoreText">0 / 0 (0%)</div>
+        </div>
+        <div class="text-2xl">🎯</div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Topic Focus</div>
+          <div class="text-sm font-bold text-slate-700 truncate max-w-[150px]" id="topicCategoryBadge">Linear Relations</div>
+        </div>
+        <div class="text-2xl">📊</div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Exam Mode</div>
+          <div class="text-sm font-bold text-emerald-600 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Active Simulation
+          </div>
+        </div>
+        <div class="text-2xl">⏱️</div>
+      </div>
+    </div>
+
+    <!-- MAIN WORKSPACE SPLIT (QUESTION AREA + INTERACTIVE LAB) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- LEFT: QUESTION & SUBMISSION PANEL (7 COLS) -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 relative overflow-hidden">
+          
+          <!-- Category and Hint Header -->
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+            <span id="qCategoryPill" class="px-3 py-1 bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wide rounded-full">
+              Category
+            </span>
+            <button onclick="toggleHint()" class="text-xs font-semibold text-amber-600 hover:text-amber-700 flex items-center gap-1 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1 rounded-full transition">
+              💡 Need a Step-by-Step Hint?
+            </button>
+          </div>
+
+          <!-- Question Content -->
+          <div id="questionContainer" class="space-y-4">
+            <h2 id="questionPrompt" class="text-lg font-bold text-slate-900 leading-snug">
+              Loading question...
+            </h2>
+
+            <!-- Dynamic Question Visual Artifact (Table or Canvas or Points) -->
+            <div id="questionVisualArea" class="bg-slate-50 border border-slate-200 rounded-xl p-4 my-3 text-center overflow-x-auto">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Hint Drawer (Hidden by default) -->
+          <div id="hintDrawer" class="hidden my-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-sm space-y-2 animate-fadeIn">
+            <div class="font-bold flex items-center gap-1.5 text-amber-800">
+              <span>💡 Master Teacher Process Hint:</span>
+            </div>
+            <div id="hintContent" class="leading-relaxed text-xs sm:text-sm"></div>
+          </div>
+
+          <!-- Answer Input Options Form -->
+          <form id="answerForm" onsubmit="handleAnswerSubmit(event)" class="mt-6 space-y-4">
+            <div id="optionsContainer" class="grid grid-cols-1 gap-3">
+              <!-- Choices rendered by JS -->
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+              <span class="text-xs text-slate-400">Select an answer or calculate carefully.</span>
+              <button id="submitBtn" type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition transform active:scale-95">
+                Check & Submit Answer
+              </button>
+            </div>
+          </form>
+
+          <!-- REVIEW & ANCHORING STEP (Reveals after answer is submitted) -->
+          <div id="anchorStep" class="hidden mt-6 pt-6 border-t-2 border-dashed border-slate-200 space-y-4">
+            <div id="feedbackBanner" class="p-4 rounded-xl flex items-start gap-3">
+              <!-- Correct/Wrong alert content -->
+            </div>
+
+            <!-- Detailed Mistake Diagnosis & Mathematical Rationale -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+              <h4 class="font-bold text-slate-800 flex items-center gap-2 text-sm">
+                <span>🔍</span> Complete Pedagogical Breakdown & Error Analysis:
+              </h4>
+              <div id="rationaleContent" class="text-slate-700 text-sm space-y-2 leading-relaxed">
+                <!-- Rationale rendered here -->
+              </div>
+            </div>
+
+            <!-- Anchor Process Callout -->
+            <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 text-indigo-900 text-xs sm:text-sm flex gap-3">
+              <span class="text-xl">🧠</span>
+              <div>
+                <span class="font-bold block text-indigo-950 mb-0.5">Anchor This Core Process:</span>
+                <span id="anchorTakeaway">Remember to always compute differences in order ($y_2 - y_1$) to maintain correct signs.</span>
+              </div>
+            </div>
+
+            <!-- Next Question Button -->
+            <div class="flex justify-end pt-2">
+              <button onclick="nextQuestion()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+                <span>Continue to Next Question</span>
+                <span>➔</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: INTERACTIVE TOOLBOX & SCRATCHPAD (5 COLS) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Tabbed Interactive Helper Box -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <span>🛠️</span> Interactive Visual Tools
+            </h3>
+            <div class="flex bg-slate-100 p-1 rounded-lg text-xs font-semibold">
+              <button id="tabGraphBtn" onclick="switchTab('graph')" class="px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm">Grid Grapher</button>
+              <button id="tabDiffBtn" onclick="switchTab('diff')" class="px-3 py-1 rounded-md text-slate-500 hover:text-slate-800">Table Analyzer</button>
+            </div>
+          </div>
+
+          <!-- TAB 1: GRAPH & LINE VIEWER -->
+          <div id="toolGraphTab" class="space-y-3">
+            <p class="text-xs text-slate-500">Plot lines or points on this 10x10 Cartesian coordinate plane:</p>
+            <div class="relative bg-white border border-slate-300 rounded-xl overflow-hidden flex justify-center items-center shadow-inner">
+              <canvas id="coordCanvas" width="360" height="360" class="cursor-crosshair"></canvas>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <button onclick="resetGraph()" class="px-2 py-1.5 bg-slate-100 hover:bg-slate-200 rounded border border-slate-300 text-slate-700 font-medium">Clear Graph</button>
+              <button onclick="plotCurrentQuestion()" class="px-2 py-1.5 bg-brand-50 hover:bg-brand-100 rounded border border-brand-200 text-brand-700 font-semibold">Plot Question Items</button>
+            </div>
+            <div id="graphCoordsInfo" class="text-center text-xs font-mono text-slate-500">Hover or click canvas to inspect coordinates</div>
+          </div>
+
+          <!-- TAB 2: TABLE OF DIFFERENCES CALCULATOR -->
+          <div id="toolDiffTab" class="hidden space-y-3">
+            <p class="text-xs text-slate-500">Enter points to visually test for Constant 1st Differences (Linear), 2nd Differences (Quadratic), or Ratios (Exponential):</p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left border border-slate-200 rounded-lg">
+                <thead class="bg-slate-100 text-slate-700 font-bold uppercase text-[10px]">
+                  <tr>
+                    <th class="p-2 border-r">x</th>
+                    <th class="p-2 border-r">y</th>
+                    <th class="p-2 border-r text-brand-700">1st Diff ($\Delta y$)</th>
+                    <th class="p-2 text-indigo-700">2nd Diff</th>
+                  </tr>
+                </thead>
+                <tbody id="diffTableBody" class="divide-y divide-slate-200 font-mono">
+                  <!-- Generated via script -->
+                </tbody>
+              </table>
+            </div>
+            <button onclick="loadQuestionTableIntoAnalyzer()" class="w-full text-xs py-2 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg font-semibold text-slate-700">
+              Load Current Question's Table Here
+            </button>
+            <div id="diffClassificationResult" class="p-2.5 bg-slate-50 rounded-lg text-xs font-semibold text-slate-700 border border-slate-200 text-center">
+              Awaiting data...
+            </div>
+          </div>
+
+        </div>
+
+        <!-- QUICK REMINDER NOTEBOOK -->
+        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-amber-900 text-xs space-y-2">
+          <div class="font-bold flex items-center gap-1.5 text-amber-950">
+            <span>📌</span> Test-Taking Golden Rules (Grade 9 Focus):
+          </div>
+          <ul class="list-disc list-inside space-y-1 text-slate-700">
+            <li><strong>Slope Formula:</strong> Subtract in exact order: $m = \frac{y_2 - y_1}{x_2 - x_1}$. Watch double negatives ($3 - (-4) = 7$).</li>
+            <li><strong>Perpendicular Lines:</strong> Negative reciprocal slope: flip the fraction and change sign ($m = \frac{2}{3} \rightarrow m_\perp = -\frac{3}{2}$).</li>
+            <li><strong>Rearranging:</strong> When isolating $y$, divide <em>all</em> terms on the opposite side by the coefficient of $y$.</li>
+            <li><strong>Systems of Equations:</strong> Different slopes guarantee exactly <strong>1 solution</strong>. Identical slope + different $y$-int = <strong>no solution</strong> (parallel lines).</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- CHEAT SHEET MODAL -->
+  <div id="cheatSheetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <span class="text-2xl">📘</span>
+          <h3 class="text-lg font-bold">Grade 9 Linear Systems & Relations: Official Process Cheat Sheet</h3>
+        </div>
+        <button onclick="toggleModal('cheatSheetModal')" class="text-slate-400 hover:text-white text-xl font-black">&times;</button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="p-6 overflow-y-auto space-y-6 text-sm text-slate-700">
+
+        <!-- Section 1: Classification -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+          <h4 class="font-bold text-brand-700 text-base flex items-center gap-2">
+            <span>1.</span> Identifying Linear, Quadratic, & Exponential Models
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1 text-xs">
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-900 block mb-1">📈 Linear</span>
+              <p>• <strong>Table:</strong> First differences ($\Delta y$) are <em>constant</em> when $x$ increments uniformly.</p>
+              <p>• <strong>Graph:</strong> Straight continuous line.</p>
+              <p>• <strong>Equation:</strong> Degree 1: $y = mx + b$.</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-900 block mb-1">🪃 Quadratic</span>
+              <p>• <strong>Table:</strong> First differences change, but <em>second differences</em> ($\Delta^2 y$) are <em>constant</em>.</p>
+              <p>• <strong>Graph:</strong> U-shaped or inverted parabola.</p>
+              <p>• <strong>Equation:</strong> Degree 2: $y = ax^2 + bx + c$.</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-slate-900 block mb-1">🚀 Exponential</span>
+              <p>• <strong>Table:</strong> Constant <em>ratio / multiplier</em> between consecutive $y$-values: $\frac{y_{k+1}}{y_k} = \text{const}$.</p>
+              <p>• <strong>Graph:</strong> Rapidly curving growth or decay towards asymptote.</p>
+              <p>• <strong>Equation:</strong> $x$ is in the exponent: $y = a(b)^x$.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Slope & Line Equations -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+          <h4 class="font-bold text-brand-700 text-base flex items-center gap-2">
+            <span>2.</span> Slope & Slope-Intercept Formulation
+          </h4>
+          <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm">
+            <li><strong>Slope Formula:</strong> $$m = \frac{\text{rise}}{\text{run}} = \frac{y_2 - y_1}{x_2 - x_1}$$</li>
+            <li><strong>Special Slopes:</strong> Horizontal line $\rightarrow m = 0$ (equation: $y = c$). Vertical line $\rightarrow m = \text{undefined}$ (division by 0, equation: $x = c$).</li>
+            <li><strong>Finding $y$-intercept ($b$):</strong> Once slope $m$ is determined, plug in any known coordinate $(x, y)$:
+              $$b = y - mx$$
+            </li>
+            <li><strong>Equation of a Line:</strong> Write in standard slope-intercept form: $y = mx + b$.</li>
+          </ul>
+        </div>
+
+        <!-- Section 3: Parallel & Perpendicular -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+          <h4 class="font-bold text-brand-700 text-base flex items-center gap-2">
+            <span>3.</span> Parallel & Perpendicular Line Relationships
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-emerald-700 block mb-1">Parallel Lines ($\parallel$)</span>
+              <p>Lines have the <strong>exact same slope</strong> ($m_1 = m_2$) but different $y$-intercepts ($b_1 \neq b_2$). They never meet.</p>
+              <p class="text-slate-500 mt-1">Example: $y = 3x + 1$ and $y = 3x - 5$.</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-slate-200">
+              <span class="font-bold text-purple-700 block mb-1">Perpendicular Lines ($\perp$)</span>
+              <p>Slopes are <strong>negative reciprocals</strong> ($m_1 \cdot m_2 = -1$). To find $m_2$, flip the fraction and negate sign:</p>
+              <p class="text-slate-500 mt-1">Example: If $m_1 = -\frac{2}{3}$, then $m_2 = +\frac{3}{2}$.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Rearranging Equations -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+          <h4 class="font-bold text-brand-700 text-base flex items-center gap-2">
+            <span>4.</span> Rearranging Standard Form into $y = mx + b$
+          </h4>
+          <ol class="list-decimal list-inside space-y-1 text-xs sm:text-sm">
+            <li><strong>Isolate the $y$ term:</strong> Move $x$ and constant terms to the right side of the equals sign by changing their signs ($Ax + By + C = 0 \rightarrow By = -Ax - C$).</li>
+            <li><strong>Divide by the coefficient of $y$:</strong> Divide every single term by $B$:
+              $$y = -\frac{A}{B}x - \frac{C}{B}$$
+            </li>
+            <li><strong>Simplify all fractions:</strong> Ensure fractions are reduced to lowest terms and inspect signs carefully.</li>
+          </ol>
+        </div>
+
+        <!-- Section 5: Linear Systems -->
+        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-2">
+          <h4 class="font-bold text-brand-700 text-base flex items-center gap-2">
+            <span>5.</span> Linear Systems: Number of Solutions & POI
+          </h4>
+          <div class="space-y-1 text-xs sm:text-sm">
+            <p>• <strong>1 Unique Solution (Point of Intersection):</strong> Occurs when lines have <strong>different slopes</strong> ($m_1 \neq m_2$). The lines cross at exactly one $(x, y)$.</p>
+            <p>• <strong>No Solution:</strong> Occurs when lines have the <strong>same slope</strong> but <strong>different $y$-intercepts</strong> ($m_1 = m_2$, $b_1 \neq b_2$). Parallel lines never intersect.</p>
+            <p>• <strong>Infinitely Many Solutions:</strong> Occurs when both equations represent the <strong>exact same line</strong> ($m_1 = m_2$ and $b_1 = b_2$). Every point on the line is a solution.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-3 bg-slate-100 border-t border-slate-200 flex justify-end">
+        <button onclick="toggleModal('cheatSheetModal')" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-900 transition">
+          Close & Back to Exam
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EXAM COMPLETION SUMMARY MODAL -->
+  <div id="resultsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-6 border border-slate-200 text-center space-y-5">
+      <div class="w-16 h-16 bg-brand-100 text-brand-700 rounded-2xl mx-auto flex items-center justify-center text-3xl">
+        🎓
+      </div>
+      <h3 class="text-2xl font-bold text-slate-900">Exam Session Complete!</h3>
+      <p class="text-slate-600 text-sm">Here is your comprehensive Grade 9 Linear Relations Diagnostic report:</p>
+      
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 grid grid-cols-3 gap-2 text-center">
+        <div>
+          <div class="text-xs text-slate-400 font-bold uppercase">Final Score</div>
+          <div id="finalScoreVal" class="text-2xl font-black text-brand-600">8 / 10</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-bold uppercase">Accuracy</div>
+          <div id="finalAccVal" class="text-2xl font-black text-emerald-600">80%</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-bold uppercase">Time Spent</div>
+          <div id="finalTimeVal" class="text-2xl font-black text-slate-700">14:22</div>
+        </div>
+      </div>
+
+      <div id="categoryBreakdown" class="text-left text-xs space-y-1.5 p-3 bg-white border border-slate-200 rounded-xl">
+        <!-- populated via script -->
+      </div>
+
+      <div class="flex justify-center gap-3 pt-2">
+        <button onclick="startNewSession()" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition">
+          Generate New 1-Hour Exam
+        </button>
+        <button onclick="toggleModal('resultsModal')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-xl transition">
+          Review Mistakes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT ENGINE: LOGIC, DYNAMIC RANDOM GENERATION & CANVAS GRAPHING -->
+  <script>
+    /* ==========================================================
+       1. EXAM STATE & ENGINE VARIABLES
+       ========================================================== */
+    let questions = [];
+    let currentQIndex = 0;
+    let score = 0;
+    let userAnswers = [];
+    let timerTotalSeconds = 3600; // 60 minutes
+    let timerRemaining = 3600;
+    let timerInterval = null;
+    let timerPaused = false;
+    let currentQuestionData = null;
+
+    /* Category Definitions mapped to Curriculum PDFs */
+    const CATEGORIES = {
+      TABLE_IDENT: "Classification: Linear vs Quadratic vs Exponential",
+      SLOPE_POINTS: "Slope Formula: Two Coordinate Points",
+      SLOPE_INTERCEPT: "Equations of Lines: Finding m & b",
+      PARALLEL_PERP: "Parallel & Perpendicular Line Relationships",
+      REARRANGE: "Algebra: Rearranging into y = mx + b Form",
+      WORD_PROBLEMS: "Linear Modeling & Word Problems",
+      SYSTEMS_SOLVE: "Solving Linear Systems by Graphing & POI",
+      SYSTEMS_NONSOLVE: "Inspecting Systems: 1, 0, or Infinite Solutions"
+    };
+
+    /* ==========================================================
+       2. DYNAMIC RANDOM QUESTION GENERATORS
+       Every session produces freshly seeded questions with exact math
+       ========================================================== */
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randNonZero(min, max) {
+      let v = 0;
+      while (v === 0) v = randInt(min, max);
+      return v;
+    }
+
+    // Simplifies fraction a/b
+    function reduceFraction(num, den) {
+      if (den < 0) { num = -num; den = -den; }
+      const gcd = (a, b) => (b === 0 ? Math.abs(a) : gcd(b, a % b));
+      const g = gcd(num, den);
+      return [num / g, den / g];
+    }
+
+    function fracToString(num, den) {
+      const [n, d] = reduceFraction(num, den);
+      if (d === 1) return `${n}`;
+      return `${n}/${d}`;
+    }
+
+    function fracToLatex(num, den) {
+      const [n, d] = reduceFraction(num, den);
+      if (d === 1) return `${n}`;
+      if (n < 0) return `-\\frac{${Math.abs(n)}}{${d}}`;
+      return `\\frac{${n}}{${d}}`;
+    }
+
+    /* Generator A: Table Classification (Linear, Quadratic, Exponential) */
+    function generateTableQuestion() {
+      const types = ['Linear', 'Quadratic', 'Exponential'];
+      const chosen = types[randInt(0, 2)];
+      const startX = -randInt(1, 3);
+      const stepX = randInt(1, 2);
+      const rows = [];
+
+      if (chosen === 'Linear') {
+        const m = randNonZero(-4, 4);
+        const b = randInt(-5, 8);
+        for (let i = 0; i < 5; i++) {
+          const x = startX + i * stepX;
+          rows.push({ x, y: m * x + b });
+        }
+      } else if (chosen === 'Quadratic') {
+        const a = randNonZero(-2, 2);
+        const h = randInt(-1, 2);
+        const k = randInt(-4, 5);
+        for (let i = 0; i < 5; i++) {
+          const x = startX + i * stepX;
+          rows.push({ x, y: a * Math.pow(x - h, 2) + k });
+        }
+      } else {
+        const base = Math.random() > 0.5 ? 2 : 3;
+        const a = randInt(1, 2);
+        for (let i = 0; i < 5; i++) {
+          const x = i;
+          rows.push({ x, y: Math.round(a * Math.pow(base, x) * 100) / 100 });
+        }
+      }
+
+      let visualHtml = `<table class="mx-auto text-xs sm:text-sm border-collapse border border-slate-300">
+        <thead class="bg-slate-200"><tr><th class="border border-slate-300 px-4 py-1">x</th><th class="border border-slate-300 px-4 py-1">y</th></tr></thead>
+        <tbody>` + rows.map(r => `<tr><td class="border border-slate-300 px-4 py-1 font-mono">${r.x}</td><td class="border border-slate-300 px-4 py-1 font-mono">${r.y}</td></tr>`).join('') + `</tbody></table>`;
+
+      return {
+        category: CATEGORIES.TABLE_IDENT,
+        tableData: rows,
+        prompt: `Analyze the given table of values. Is the relationship <strong>Linear</strong>, <strong>Quadratic</strong>, or <strong>Exponential</strong>?`,
+        visualHtml: visualHtml,
+        plotData: { type: 'points', points: rows.map(r => ({x: r.x, y: r.y})) },
+        hint: `Calculate the 1st differences ($\Delta y = y_{k+1} - y_k$). If constant, it's Linear. If not, compute the 2nd differences (differences of 1st differences). If those are constant, it's Quadratic. If there is a constant multiplier/ratio, it's Exponential!`,
+        correctAnswer: chosen,
+        options: [
+          { text: "Linear", rationale: "First differences are constant." },
+          { text: "Quadratic", rationale: "Second differences are constant (rate of change itself changes linearly)." },
+          { text: "Exponential", rationale: "Successive y-values multiply by a constant factor/ratio." }
+        ],
+        explanation: `In this table, computing the successive differences shows that: ${
+          chosen === 'Linear' 
+            ? 'The 1st differences are completely constant.' 
+            : chosen === 'Quadratic' 
+              ? 'The 1st differences change, but the 2nd differences are constant.' 
+              : 'The values change by a constant multiplier / ratio.'
+        } Therefore, it is strictly <strong>${chosen}</strong>.`,
+        anchorRule: `Always calculate 1st differences first. If they aren't constant, take the difference of those differences (2nd differences).`
+      };
+    }
+
+    /* Generator B: Slope from 2 points */
+    function generateSlopePointsQuestion() {
+      const x1 = randInt(-6, 6);
+      const y1 = randInt(-6, 6);
+      let x2 = randInt(-6, 6);
+      let y2 = randInt(-6, 6);
+
+      // Avoid identical points
+      if (x1 === x2 && y1 === y2) y2 += 3;
+
+      const dy = y2 - y1;
+      const dx = x2 - x1;
+
+      let correctStr = "";
+      let correctRationale = "";
+      if (dx === 0) {
+        correctStr = "Undefined";
+        correctRationale = "The denominator ($x_2 - x_1$) is 0, creating a vertical line with undefined slope.";
+      } else if (dy === 0) {
+        correctStr = "0";
+        correctRationale = "The numerator ($y_2 - y_1$) is 0, indicating a flat horizontal line with slope 0.";
+      } else {
+        correctStr = fracToString(dy, dx);
+        correctRationale = `Using m = (${y2} - ${y1}) / (${x2} - ${x1}) = ${dy}/${dx} which reduces to ${correctStr}.`;
+      }
+
+      // Generate distractors
+      const distSet = new Set();
+      distSet.add(correctStr);
+
+      if (dx !== 0 && dy !== 0) {
+        distSet.add(fracToString(dx, dy)); // inverted run/rise
+        distSet.add(fracToString(-dy, dx)); // sign flip
+        distSet.add(fracToString(dy + 1, dx)); // arithmetic slip
+      } else {
+        distSet.add("0");
+        distSet.add("Undefined");
+        distSet.add("1");
+        distSet.add("-1");
+      }
+      while (distSet.size < 4) {
+        distSet.add(fracToString(randNonZero(-4, 4), randNonZero(1, 4)));
+      }
+
+      const options = Array.from(distSet).map(val => ({
+        text: val,
+        rationale: val === correctStr ? correctRationale : 
+          (val === "Undefined" ? "Common mistake when confusing vertical ($\Delta x=0$) and horizontal lines." :
+           val === fracToString(dx, dy) ? "Common error: inverted the ratio as run/rise instead of rise/run ($\Delta y / \Delta x$)." :
+           "Resulting from sign miscalculations when subtracting negative coordinates.")
+      }));
+
+      return {
+        category: CATEGORIES.SLOPE_POINTS,
+        prompt: `Find the slope ($m$) of the line passing through the points <strong>(${x1}, ${y1})</strong> and <strong>(${x2}, ${y2})</strong>.`,
+        visualHtml: `<div class="font-mono text-base text-slate-700 font-bold">A = (${x1}, ${y1}) &nbsp;&nbsp;&nbsp; B = (${x2}, ${y2})</div>`,
+        plotData: { type: 'linePoints', p1: {x: x1, y: y1}, p2: {x: x2, y: y2} },
+        hint: `Use the formula $m = \\frac{y_2 - y_1}{x_2 - x_1}$. Be very careful with signs: subtracting a negative becomes addition!`,
+        correctAnswer: correctStr,
+        options: options,
+        explanation: `Substitute coordinates into $m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = \\frac{${dy}}{${dx}}$. ${
+          dx === 0 ? "Division by zero means the line is vertical and the slope is Undefined." : 
+          dy === 0 ? "The numerator is zero, so the slope is 0 (horizontal line)." : 
+          `Reduced fraction: <strong>${correctStr}</strong>.`
+        }`,
+        anchorRule: `Rise is ALWAYS over Run: $m = \\frac{\\Delta y}{\\Delta x}$. Never flip the formula to $\\Delta x / \\Delta y$.`
+      };
+    }
+
+    /* Generator C: Find y-intercept and write equation y = mx + b */
+    function generateEquationFromPointsQuestion() {
+      const m = randNonZero(-3, 3);
+      const b = randInt(-5, 5);
+      const x1 = randInt(-4, 4);
+      const y1 = m * x1 + b;
+      const x2 = x1 + randNonZero(-3, 3);
+      const y2 = m * x2 + b;
+
+      const signB = b >= 0 ? `+ ${b}` : `- ${Math.abs(b)}`;
+      const correctEq = b === 0 ? `y = ${m}x` : `y = ${m}x ${signB}`;
+
+      const options = [
+        { text: correctEq, rationale: `Slope is ${m} and solving b = ${y1} - (${m})(${x1}) yields ${b}.` },
+        { text: `y = ${-m}x ${signB}`, rationale: "Incorrect sign used for the slope $m$." },
+        { text: `y = ${m}x ${b >= 0 ? `- ${b}` : `+ ${Math.abs(b)}`}`, rationale: "Incorrect sign used when isolating the y-intercept $b$." },
+        { text: `y = ${fracToString(1, m)}x ${signB}`, rationale: "Reciprocal slope was mistakenly used." }
+      ];
+
+      return {
+        category: CATEGORIES.SLOPE_INTERCEPT,
+        prompt: `Determine the equation of the line passing through <strong>(${x1}, ${y1})</strong> and <strong>(${x2}, ${y2})</strong> in slope-intercept form ($y = mx + b$).`,
+        visualHtml: `<div class="font-mono text-base text-slate-700">Point 1: (${x1}, ${y1}) &nbsp;|&nbsp; Point 2: (${x2}, ${y2})</div>`,
+        plotData: { type: 'lineEquation', m: m, b: b },
+        hint: `Step 1: Calculate slope $m = \\frac{y_2 - y_1}{x_2 - x_1}$. Step 2: Plug in one point and $m$ into $b = y - mx$. Step 3: Write $y = mx + b$.`,
+        correctAnswer: correctEq,
+        options: options,
+        explanation: `1) Find slope: $m = \\frac{${y2} - (${y1})}{${x2} - (${x1})} = ${m}$.<br/>2) Substitute point (${x1}, ${y1}): $b = ${y1} - (${m})(${x1}) = ${b}$.<br/>3) Combine into $y = mx + b$: <strong>${correctEq}</strong>.`,
+        anchorRule: `To find $b$, always use the rearrangement $b = y - mx$ using one point coordinate.`
+      };
+    }
+
+    /* Generator D: Parallel & Perpendicular Lines */
+    function generateParallelPerpQuestion() {
+      const isParallel = Math.random() > 0.5;
+      const num = randNonZero(-4, 4);
+      const den = randInt(1, 3);
+      const [n, d] = reduceFraction(num, den);
+      const baseSlopeStr = fracToString(n, d);
+      const baseSlopeLatex = fracToLatex(n, d);
+
+      const px = randInt(-4, 4);
+      const py = randInt(-4, 4);
+
+      let targetM_n, targetM_d;
+      if (isParallel) {
+        targetM_n = n;
+        targetM_d = d;
+      } else {
+        targetM_n = -d;
+        targetM_d = n;
+      }
+      const [finalM_n, finalM_d] = reduceFraction(targetM_n, targetM_d);
+      
+      // Calculate b: b = py - m * px -> b = py - (finalM_n * px / finalM_d)
+      // b = (py * finalM_d - finalM_n * px) / finalM_d
+      const b_num = py * finalM_d - finalM_n * px;
+      const b_den = finalM_d;
+      const bStr = fracToString(b_num, b_den);
+
+      const mString = fracToString(finalM_n, finalM_d);
+      const signPart = (b_num / b_den) >= 0 ? `+ ${bStr}` : `- ${fracToString(Math.abs(b_num), b_den)}`;
+      const correctEq = `y = ${mString}x ${signPart}`;
+
+      const options = [
+        { text: correctEq, rationale: isParallel ? "Parallel lines must have identical slopes." : "Perpendicular lines must have negative reciprocal slopes." },
+        { text: `y = ${fracToString(-finalM_n, finalM_d)}x ${signPart}`, rationale: "Forgot to negate or incorrectly flipped the slope sign." },
+        { text: `y = ${fracToString(finalM_d, finalM_n)}x ${signPart}`, rationale: "Reciprocal taken without negating (or vice versa)." },
+        { text: `y = ${mString}x + ${randInt(1, 7)}`, rationale: "Failed to solve for the specific y-intercept passing through the required point." }
+      ];
+
+      const questionTypeDesc = isParallel ? "parallel" : "perpendicular";
+
+      return {
+        category: CATEGORIES.PARALLEL_PERP,
+        prompt: `Find the equation of the line that is <strong>${questionTypeDesc}</strong> to the line $y = ${baseSlopeLatex}x + 7$ and passes through the point <strong>(${px}, ${py})</strong>.`,
+        visualHtml: `<div class="text-sm">Target Point: <strong>(${px}, ${py})</strong> &bull; Condition: <strong>${questionTypeDesc.toUpperCase()}</strong> to $y = ${baseSlopeLatex}x + 7$</div>`,
+        plotData: { type: 'lineEquation', m: finalM_n / finalM_d, b: b_num / b_den },
+        hint: isParallel 
+          ? `Parallel lines share the EXACT same slope: $m = ${baseSlopeLatex}$. Then substitute (${px}, ${py}) to find $b$.` 
+          : `Perpendicular lines have negative reciprocal slopes: flip the fraction and negate the sign. Then substitute (${px}, ${py}) to find $b$.`,
+        correctAnswer: correctEq,
+        options: options,
+        explanation: `For ${questionTypeDesc} lines: ${
+          isParallel 
+            ? `The slope remains identical: $m = ${mString}$.` 
+            : `The negative reciprocal of ${baseSlopeStr} is$m = -\\frac{1}{${baseSlopeStr}} = ${mString}$.`
+        }<br/>Now solve for $b$ through (${px}, ${py}): $b = ${py} - (${mString})(${px}) = ${bStr}$. Result: <strong>${correctEq}</strong>.`,
+        anchorRule: `Parallel: $m_1 = m_2$. Perpendicular: $m_2 = -\\frac{1}{m_1}$ (flip fraction and flip sign).`
+      };
+    }
+
+    /* Generator E: Rearranging into y = mx + b */
+    function generateRearrangeQuestion() {
+      const A = randNonZero(-5, 5);
+      const B = randNonZero(2, 4); // Keep B positive integer to ensure clean isolation
+      const C = randInt(-12, 12);
+
+      // Equation: Ax + By + C = 0 -> By = -Ax - C -> y = (-A/B)x - (C/B)
+      const signC = C >= 0 ? `+ ${C}` : `- ${Math.abs(C)}`;
+      const eqStandard = `${A}x + ${B}y ${signC} = 0`;
+
+      const slopeStr = fracToString(-A, B);
+      const interceptStr = fracToString(-C, B);
+      const signIntercept = (-C / B) >= 0 ? `+ ${interceptStr}` : `- ${fracToString(Math.abs(C), B)}`;
+      const correctForm = `y = ${slopeStr}x ${signIntercept}`;
+
+      const options = [
+        { text: correctForm, rationale: "Correctly shifted terms across equals sign and divided all terms by the coefficient of y." },
+        { text: `y = ${fracToString(A, B)}x ${signIntercept}`, rationale: "Sign error: forgot to negate A when moving it across the equals sign." },
+        { text: `y = ${slopeStr}x ${signC}`, rationale: "Forgot to divide the constant term C by B when dividing both sides." },
+        { text: `y = ${-A}x - ${C}`, rationale: "Moved terms over but completely forgot to divide by B." }
+      ];
+
+      return {
+        category: CATEGORIES.REARRANGE,
+        prompt: `Rearrange the standard linear equation into slope-intercept form ($y = mx + b$):<br/><span class="text-xl font-mono text-brand-700">${eqStandard}</span>`,
+        visualHtml: `<div class="font-mono text-sm">Goal: Isolate y on the left side: $y = mx + b$</div>`,
+        plotData: { type: 'lineEquation', m: -A / B, b: -C / B },
+        hint: `1) Move the $x$ term and constant to the right by flipping their signs: $${B}y = ${-A}x - (${C})$. 2) Divide EVERY term by $${B}$.`,
+        correctAnswer: correctForm,
+        options: options,
+        explanation: `1) Subtract ${A}x and subtract ${C} from both sides: $${B}y = ${-A}x - (${C})$.<br/>2) Divide every single term by ${B}: $y = \\frac{${-A}}{${B}}x - \\frac{${C}}{${B}}$.<br/>3) Simplified: <strong>${correctForm}</strong> with slope $m = ${slopeStr}$ and $b = ${interceptStr}$.`,
+        anchorRule: `When dividing by the coefficient of $y$, EVERY term on the other side must be divided.`
+      };
+    }
+
+    /* Generator F: Grade 9 Word Problem Modeling */
+    function generateWordProblemQuestion() {
+      const scenarios = [
+        {
+          item1: "arcade pinball machines",
+          item2: "pool tables",
+          var1: "x",
+          var2: "y",
+          c1: 8,
+          c2: 6,
+          total: 124000
+        },
+        {
+          item1: "hamburgers",
+          item2: "orders of fries",
+          var1: "x",
+          var2: "y",
+          c1: 6,
+          c2: 4,
+          total: 48
+        },
+        {
+          item1: "student tickets",
+          item2: "adult tickets",
+          var1: "x",
+          var2: "y",
+          c1: 5,
+          c2: 3,
+          total: 85
+        }
+      ];
+
+      const s = scenarios[randInt(0, scenarios.length - 1)];
+      const prompt = `A recreation hall purchases <strong>${s.c1} ${s.item1}</strong> and <strong>${s.c2} ${s.item2}</strong> for a total cost of <strong>$${s.total.toLocaleString()}</strong>. If $${s.var1}$ represents the unit cost of one of the ${s.item1} and $${s.var2}$ represents the unit cost of one of the ${s.item2}, which equation accurately represents this situation?`;
+
+      const correctEq = `${s.c1}${s.var1} + ${s.c2}${s.var2} = ${s.total}`;
+      const options = [
+        { text: correctEq, rationale: `Total cost equals rate 1 times quantity 1 plus rate 2 times quantity 2: ${s.c1}x + ${s.c2}y = ${s.total}.` },
+        { text: `${s.c2}${s.var1} + ${s.c1}${s.var2} = ${s.total}`, rationale: "Swapped the variable coefficients between the two different goods." },
+        { text: `(${s.c1} + ${s.c2})(${s.var1} + ${s.var2}) = ${s.total}`, rationale: "Incorrectly grouped quantities and costs into a product." },
+        { text: `${s.c1}${s.var1} - ${s.c2}${s.var2} = ${s.total}`, rationale: "Used subtraction instead of adding total combined expenses." }
+      ];
+
+      return {
+        category: CATEGORIES.WORD_PROBLEMS,
+        prompt: prompt,
+        visualHtml: `<div class="bg-brand-50 border border-brand-200 p-3 rounded-lg text-xs sm:text-sm">` +
+                    `Total Cost = (Cost per ${s.item1} &times; ${s.c1}) + (Cost per ${s.item2} &times; ${s.c2})</div>`,
+        plotData: null,
+        hint: `Multiply each quantity by its respective cost variable ($${s.c1} \\cdot ${s.var1}$ and $${s.c2} \\cdot ${s.var2}$) and set the sum equal to the total cost.`,
+        correctAnswer: correctEq,
+        options: options,
+        explanation: `Each ${s.item1} costs $x$, so ${s.c1} cost $${s.c1}x$. Each ${s.item2} costs $y$, so ${s.c2} cost $${s.c2}y$. Adding them yields the total: <strong>${correctEq}</strong>.`,
+        anchorRule: `In linear cost models: Total = (Rate 1 &times; Quantity 1) + (Rate 2 &times; Quantity 2).`
+      };
+    }
+
+    /* Generator G: Solving Systems by Graphing (POI) */
+    function generateSystemsGraphingQuestion() {
+      // Pick clean integer intersection (h, k)
+      const h = randInt(-3, 3);
+      const k = randInt(-3, 3);
+
+      const m1 = randNonZero(-2, 2);
+      let m2 = randNonZero(-2, 2);
+      while (m2 === m1) m2 = randNonZero(-2, 2);
+
+      const b1 = k - m1 * h;
+      const b2 = k - m2 * h;
+
+      const signB1 = b1 >= 0 ? `+ ${b1}` : `- ${Math.abs(b1)}`;
+      const signB2 = b2 >= 0 ? `+ ${b2}` : `- ${Math.abs(b2)}`;
+
+      const eq1 = `y = ${m1}x ${signB1}`;
+      const eq2 = `y = ${m2}x ${signB2}`;
+
+      const correctPOI = `(${h}, ${k})`;
+      const options = [
+        { text: correctPOI, rationale: `Both lines intersect precisely at x = ${h}, y = ${k}.` },
+        { text: `(${k}, ${h})`, rationale: "Coordinates inverted as (y, x) instead of standard (x, y)." },
+        { text: `(${h + 1}, ${k - 1})`, rationale: "Common graphing error by miscounting the slope rise/run on the grid." },
+        { text: "No Solution", rationale: "Lines have distinct slopes and therefore must intersect at a single point." }
+      ];
+
+      return {
+        category: CATEGORIES.SYSTEMS_SOLVE,
+        prompt: `Solve the system of linear equations by graphing. What is the coordinates of the <strong>Point of Intersection (POI)</strong>?<br/><div class="font-mono text-brand-700 mt-1">${eq1}<br/>${eq2}</div>`,
+        visualHtml: `<div class="text-xs text-slate-500">Check where both lines intersect on the Coordinate Grapher tab!</div>`,
+        plotData: { type: 'system', m1: m1, b1: b1, m2: m2, b2: b2, poi: {x: h, y: k} },
+        hint: `Graph line 1 starting at $y$-intercept $b_1 = ${b1}$ using slope $m_1 = ${m1}$. Graph line 2. Find the exact point where they cross.`,
+        correctAnswer: correctPOI,
+        options: options,
+        explanation: `Setting equations equal: $${m1}x ${signB1} = ${m2}x ${signB2}$.<br/>Solving gives $x = ${h}$. Substituting into either equation gives $y = ${k}$. The POI is <strong>(${h}, ${k})</strong>.`,
+        anchorRule: `The solution to a linear system is the unique coordinate pair $(x, y)$ that satisfies both equations simultaneously.`
+      };
+    }
+
+    /* Generator H: Number of solutions without graphing */
+    function generateNumSolutionsQuestion() {
+      const conditionType = randInt(1, 3); // 1: One solution, 2: No solution, 3: Infinite
+      let m1, b1, m2, b2, correctStr;
+
+      if (conditionType === 1) {
+        m1 = 2; b1 = 3;
+        m2 = -1; b2 = 6;
+        correctStr = "One unique solution";
+      } else if (conditionType === 2) {
+        m1 = 3; b1 = 2;
+        m2 = 3; b2 = -4;
+        correctStr = "No solution (Parallel lines)";
+      } else {
+        m1 = -2; b1 = 5;
+        m2 = -2; b2 = 5;
+        correctStr = "Infinitely many solutions (Same line)";
+      }
+
+      const eq1 = `y = ${m1}x ${b1 >= 0 ? '+ ' + b1 : '- ' + Math.abs(b1)}`;
+      const eq2 = conditionType === 3 ? `2y = ${2*m1}x + ${2*b1}` : `y = ${m2}x ${b2 >= 0 ? '+ ' + b2 : '- ' + Math.abs(b2)}`;
+
+      const options = [
+        { text: "One unique solution", rationale: "Slopes are different ($m_1 \\ne m_2$), so lines intersect once." },
+        { text: "No solution (Parallel lines)", rationale: "Slopes are identical ($m_1 = m_2$) but y-intercepts differ ($b_1 \\ne b_2$)." },
+        { text: "Infinitely many solutions (Same line)", rationale: "Both equations simplify to the exact same slope and y-intercept." }
+      ];
+
+      return {
+        category: CATEGORIES.SYSTEMS_NONSOLVE,
+        prompt: `Without graphing, determine how many solutions this linear system has:<br/><div class="font-mono text-brand-700 mt-1">${eq1}<br/>${eq2}</div>`,
+        visualHtml: `<div class="text-xs">Compare slope ($m$) and $y$-intercept ($b$) of both lines.</div>`,
+        plotData: { type: 'lineEquation', m: m1, b: b1 },
+        hint: `Put both into $y = mx + b$. If slopes are different &rarr; 1 solution. If slopes are same and intercepts differ &rarr; 0 solutions. If both are identical &rarr; Infinite.`,
+        correctAnswer: correctStr,
+        options: options,
+        explanation: `Comparing the lines: $m_1 = ${m1}$ and $m_2 = ${m2}$. ${
+          conditionType === 1 
+            ? `Since the slopes are different ($m_1 \\neq m_2$), the lines are not parallel and will intersect at exactly <strong>one point</strong>.` 
+            : conditionType === 2 
+              ? `The slopes are identical ($m = ${m1}$), but the $y$-intercepts are different (${b1} vs${b2}). The lines are parallel and will never meet (<strong>no solution</strong>).` 
+              : `Both equations represent the identical line with the same slope and same intercept (<strong>infinitely many solutions</strong>).`
+        }`,
+        anchorRule: `Slope dictates intersection behavior: Different $m$ = 1 solution; Same $m$, different $b$ = 0 solutions; Same $m$, same $b$ = $\\infty$ solutions.`
+      };
+    }
+
+    /* ==========================================================
+       3. EXAM SESSION BUILDER
+       Builds a 10-question standardized exam covering all objectives
+       ========================================================== */
+    function buildExamSession() {
+      const generators = [
+        generateTableQuestion,
+        generateSlopePointsQuestion,
+        generateEquationFromPointsQuestion,
+        generateParallelPerpQuestion,
+        generateRearrangeQuestion,
+        generateWordProblemQuestion,
+        generateSystemsGraphingQuestion,
+        generateNumSolutionsQuestion,
+        generateSlopePointsQuestion,
+        generateParallelPerpQuestion
+      ];
+
+      // Shuffle generators slightly while preserving breadth
+      const session = generators.map(fn => fn());
+      return session;
+    }
+
+    /* ==========================================================
+       4. EXAM LIFECYCLE & NAVIGATION
+       ========================================================== */
+    function startNewSession() {
+      questions = buildExamSession();
+      currentQIndex = 0;
+      score = 0;
+      userAnswers = [];
+      timerRemaining = timerTotalSeconds;
+      timerPaused = false;
+
+      document.getElementById('resultsModal').classList.add('hidden');
+      document.getElementById('anchorStep').classList.add('hidden');
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+
+      startTimer();
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      currentQuestionData = questions[currentQIndex];
+
+      // UI Badges
+      document.getElementById('progressText').textContent = `Question ${currentQIndex + 1} / ${questions.length}`;
+      document.getElementById('scoreText').textContent = `${score} / ${currentQIndex} (${currentQIndex === 0 ? 0 : Math.round((score/currentQIndex)*100)}%)`;
+      document.getElementById('topicCategoryBadge').textContent = currentQuestionData.category.split(':')[0];
+      document.getElementById('qCategoryPill').textContent = currentQuestionData.category;
+
+      // Question text & visual
+      document.getElementById('questionPrompt').innerHTML = currentQuestionData.prompt;
+      document.getElementById('questionVisualArea').innerHTML = currentQuestionData.visualHtml;
+
+      // Hint drawer reset
+      document.getElementById('hintDrawer').classList.add('hidden');
+      document.getElementById('hintContent').innerHTML = currentQuestionData.hint;
+
+      // Options
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      // Shuffle answer options
+      const shuffledOptions = [...currentQuestionData.options].sort(() => Math.random() - 0.5);
+
+      shuffledOptions.forEach((opt, idx) => {
+        const optionId = `opt_${idx}`;
+        const card = document.createElement('label');
+        card.className = `flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-brand-50/70 hover:border-brand-300 transition cursor-pointer text-slate-800 text-sm font-medium`;
+        card.innerHTML = `
+          <input type="radio" name="examAnswer" value="${opt.text.replace(/"/g, '&quot;')}" id="${optionId}" class="w-4 h-4 text-brand-600 focus:ring-brand-500 border-slate-300">
+          <span class="flex-1">${opt.text}</span>
+        `;
+        optionsContainer.appendChild(card);
+      });
+
+      // Hide Anchor/Review Step
+      document.getElementById('anchorStep').classList.add('hidden');
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('submitBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+
+      // Auto update Interactive Tools with current question data
+      plotCurrentQuestion();
+      populateDifferencesTable();
+
+      // Render math expressions if KaTeX auto-render exists
+      if (window.renderMathInBody) {
+        renderMathInBody(document.getElementById('questionContainer'));
+        renderMathInBody(document.getElementById('optionsContainer'));
+        renderMathInBody(document.getElementById('hintDrawer'));
+      }
+    }
+
+    function toggleHint() {
+      const drawer = document.getElementById('hintDrawer');
+      drawer.classList.toggle('hidden');
+      if (window.renderMathInBody) renderMathInBody(drawer);
+    }
+
+    function handleAnswerSubmit(e) {
+      e.preventDefault();
+      const selected = document.querySelector('input[name="examAnswer"]:checked');
+      if (!selected) {
+        alert("Please choose an answer choice to submit.");
+        return;
+      }
+
+      const chosenVal = selected.value;
+      const isCorrect = (chosenVal === currentQuestionData.correctAnswer);
+
+      if (isCorrect) score++;
+      userAnswers.push({
+        qIndex: currentQIndex,
+        isCorrect: isCorrect,
+        chosen: chosenVal,
+        correct: currentQuestionData.correctAnswer,
+        category: currentQuestionData.category
+      });
+
+      // Lock options & submit button
+      document.querySelectorAll('input[name="examAnswer"]').forEach(inp => inp.disabled = true);
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('submitBtn').classList.add('opacity-50', 'cursor-not-allowed');
+
+      // Feedback banner
+      const banner = document.getElementById('feedbackBanner');
+      if (isCorrect) {
+        banner.className = "p-4 rounded-xl flex items-start gap-3 bg-emerald-50 border border-emerald-200 text-emerald-900";
+        banner.innerHTML = `
+          <span class="text-2xl">🎉</span>
+          <div>
+            <span class="font-bold block text-emerald-950">Outstanding Work! That is Correct.</span>
+            <span class="text-xs sm:text-sm text-emerald-800">You applied the Grade 9 algebraic rule precisely.</span>
+          </div>
+        `;
+      } else {
+        banner.className = "p-4 rounded-xl flex items-start gap-3 bg-rose-50 border border-rose-200 text-rose-900";
+        banner.innerHTML = `
+          <span class="text-2xl">⚠️</span>
+          <div>
+            <span class="font-bold block text-rose-950">Review Required: Not quite right.</span>
+            <span class="text-xs sm:text-sm text-rose-800">Your Answer: <strong>${chosenVal}</strong> &nbsp;|&nbsp; Correct Answer: <strong>${currentQuestionData.correctAnswer}</strong></span>
+          </div>
+        `;
+      }
+
+      // Populate Detailed Mistake Breakdown & Rationale
+      const rationaleDiv = document.getElementById('rationaleContent');
+      const selectedOptObj = currentQuestionData.options.find(o => o.text === chosenVal);
+      const chosenRationale = selectedOptObj ? selectedOptObj.rationale : "";
+
+      rationaleDiv.innerHTML = `
+        <p><strong>Step-by-Step Solution:</strong> ${currentQuestionData.explanation}</p>
+        ${!isCorrect ? `<p class="p-2.5 bg-rose-100/60 rounded-lg text-rose-950 text-xs"><strong>Common Mistake Analysis:</strong> ${chosenRationale}</p>` : ''}
+      `;
+
+      // Anchor rule
+      document.getElementById('anchorTakeaway').textContent = currentQuestionData.anchorRule;
+
+      // Reveal Anchor Step
+      document.getElementById('anchorStep').classList.remove('hidden');
+
+      // Re-render math in newly visible rationale
+      if (window.renderMathInBody) {
+        renderMathInBody(document.getElementById('anchorStep'));
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQIndex < questions.length - 1) {
+        currentQIndex++;
+        renderQuestion();
+      } else {
+        showFinalResults();
+      }
+    }
+
+    function showFinalResults() {
+      clearInterval(timerInterval);
+      const pct = Math.round((score / questions.length) * 100);
+      document.getElementById('finalScoreVal').textContent = `${score} / ${questions.length}`;
+      document.getElementById('finalAccVal').textContent = `${pct}%`;
+
+      const elapsedSec = timerTotalSeconds - timerRemaining;
+      const mins = Math.floor(elapsedSec / 60);
+      const secs = elapsedSec % 60;
+      document.getElementById('finalTimeVal').textContent = `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+
+      // Category breakdown
+      const catMap = {};
+      userAnswers.forEach(ans => {
+        if (!catMap[ans.category]) catMap[ans.category] = { total: 0, correct: 0 };
+        catMap[ans.category].total++;
+        if (ans.isCorrect) catMap[ans.category].correct++;
+      });
+
+      let html = `<div class="font-bold text-slate-800 mb-2">Category Performance Breakdown:</div>`;
+      for (const [cat, data] of Object.entries(catMap)) {
+        const catPct = Math.round((data.correct / data.total) * 100);
+        html += `
+          <div class="flex justify-between items-center py-1 border-b border-slate-100">
+            <span class="truncate max-w-[280px]">${cat}</span>
+            <span class="font-mono font-bold ${catPct >= 70 ? 'text-emerald-600' : 'text-rose-600'}">${data.correct}/${data.total} (${catPct}%)</span>
+          </div>
+        `;
+      }
+      document.getElementById('categoryBreakdown').innerHTML = html;
+
+      toggleModal('resultsModal');
+    }
+
+    /* ==========================================================
+       5. COUNTDOWN TIMER
+       ========================================================== */
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!timerPaused) {
+          if (timerRemaining > 0) {
+            timerRemaining--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            alert("Time has expired for this 1-hour exam session!");
+            showFinalResults();
+          }
+        }
+      }, 1000);
+      updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timerRemaining / 60);
+      const seconds = timerRemaining % 60;
+      document.getElementById('timerDisplay').textContent = 
+        `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function toggleTimer() {
+      timerPaused = !timerPaused;
+      const btn = document.getElementById('pauseTimerBtn');
+      btn.textContent = timerPaused ? "Resume" : "Pause";
+      btn.className = timerPaused ? "text-xs font-semibold px-1.5 py-0.5 rounded bg-amber-200 text-amber-900" : "text-xs font-semibold px-1.5 py-0.5 rounded bg-white hover:bg-slate-200 border text-slate-600 transition";
+    }
+
+    /* ==========================================================
+       6. INTERACTIVE CARTESIAN COORDINATE GRAPH CANVAS
+       ========================================================== */
+    const canvas = document.getElementById('coordCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 10; // -10 to +10
+    const w = canvas.width;
+    const h = canvas.height;
+    const originX = w / 2;
+    const originY = h / 2;
+    const step = (w / 2) / gridSize;
+
+    function toScreenX(mathX) { return originX + mathX * step; }
+    function toScreenY(mathY) { return originY - mathY * step; }
+    function toMathX(screenX) { return Math.round((screenX - originX) / step); }
+    function toMathY(screenY) { return Math.round((originY - screenY) / step); }
+
+    function drawGrid() {
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid lines
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#e2e8f0';
+
+      for (let i = -gridSize; i <= gridSize; i++) {
+        // Vertical
+        ctx.beginPath();
+        ctx.moveTo(toScreenX(i), 0);
+        ctx.lineTo(toScreenX(i), h);
+        ctx.stroke();
+
+        // Horizontal
+        ctx.beginPath();
+        ctx.moveTo(0, toScreenY(i));
+        ctx.lineTo(w, toScreenY(i));
+        ctx.stroke();
+      }
+
+      // Main Axes
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#475569';
+      // X Axis
+      ctx.beginPath();
+      ctx.moveTo(0, originY);
+      ctx.lineTo(w, originY);
+      ctx.stroke();
+      // Y Axis
+      ctx.beginPath();
+      ctx.moveTo(originX, 0);
+      ctx.lineTo(originX, h);
+      ctx.stroke();
+
+      // Axis labels
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px sans-serif';
+      ctx.fillText("x", w - 12, originY - 5);
+      ctx.fillText("y", originX + 5, 12);
+      ctx.fillText("0", originX + 3, originY + 12);
+
+      // Major tick marks numbers
+      for (let i = -8; i <= 8; i += 4) {
+        if (i !== 0) {
+          ctx.fillText(i, toScreenX(i) - 4, originY + 12);
+          ctx.fillText(i, originX + 4, toScreenY(i) + 4);
+        }
+      }
+    }
+
+    function resetGraph() {
+      drawGrid();
+      document.getElementById('graphCoordsInfo').textContent = "Graph reset. Hover or click to inspect points.";
+    }
+
+    function drawPoint(x, y, color = '#0284c7', label = '') {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(toScreenX(x), toScreenY(y), 4.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+
+      if (label) {
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(label, toScreenX(x) + 6, toScreenY(y) - 6);
+      }
+    }
+
+    function drawLine(m, b, color = '#2563eb', lineWidth = 2.5) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.beginPath();
+
+      const xLeft = -gridSize;
+      const yLeft = m * xLeft + b;
+
+      const xRight = gridSize;
+      const yRight = m * xRight + b;
+
+      ctx.moveTo(toScreenX(xLeft), toScreenY(yLeft));
+      ctx.lineTo(toScreenX(xRight), toScreenY(yRight));
+      ctx.stroke();
+    }
+
+    function plotCurrentQuestion() {
+      drawGrid();
+      if (!currentQuestionData || !currentQuestionData.plotData) return;
+
+      const p = currentQuestionData.plotData;
+      if (p.type === 'points') {
+        p.points.forEach((pt, i) => drawPoint(pt.x, pt.y, '#0284c7', `P${i+1}`));
+      } else if (p.type === 'linePoints') {
+        drawPoint(p.p1.x, p.p1.y, '#e11d48', 'A');
+        drawPoint(p.p2.x, p.p2.y, '#e11d48', 'B');
+        if (p.p2.x !== p.p1.x) {
+          const m = (p.p2.y - p.p1.y) / (p.p2.x - p.p1.x);
+          const b = p.p1.y - m * p.p1.x;
+          drawLine(m, b, '#0284c7');
+        } else {
+          // Vertical line
+          ctx.strokeStyle = '#0284c7';
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(toScreenX(p.p1.x), 0);
+          ctx.lineTo(toScreenX(p.p1.x), h);
+          ctx.stroke();
+        }
+      } else if (p.type === 'lineEquation') {
+        drawLine(p.m, p.b, '#0284c7');
+        drawPoint(0, p.b, '#10b981', `b(${p.b})`);
+      } else if (p.type === 'system') {
+        drawLine(p.m1, p.b1, '#0284c7');
+        drawLine(p.m2, p.b2, '#8b5cf6');
+        drawPoint(p.poi.x, p.poi.y, '#e11d48', `POI(${p.poi.x}, ${p.poi.y})`);
+      }
+
+      document.getElementById('graphCoordsInfo').textContent = "Visual representation for current question loaded.";
+    }
+
+    // Canvas interactivity
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const mathX = toMathX(mx);
+      const mathY = toMathY(my);
+      document.getElementById('graphCoordsInfo').textContent = `Pointer: (${mathX}, ${mathY})`;
+    });
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const mathX = toMathX(mx);
+      const mathY = toMathY(my);
+      drawPoint(mathX, mathY, '#f59e0b', `(${mathX}, ${mathY})`);
+    });
+
+    /* ==========================================================
+       7. TABLE OF DIFFERENCES ANALYZER TOOL
+       ========================================================== */
+    function populateDifferencesTable(customRows = null) {
+      const tbody = document.getElementById('diffTableBody');
+      tbody.innerHTML = '';
+
+      let rows = customRows;
+      if (!rows) {
+        if (currentQuestionData && currentQuestionData.tableData) {
+          rows = currentQuestionData.tableData;
+        } else {
+          // Default mock
+          rows = [
+            {x: 0, y: 1},
+            {x: 1, y: 4},
+            {x: 2, y: 7},
+            {x: 3, y: 10},
+            {x: 4, y: 13}
+          ];
+        }
+      }
+
+      // Compute first differences
+      const firstDiffs = [];
+      for (let i = 0; i < rows.length - 1; i++) {
+        firstDiffs.push(Math.round((rows[i+1].y - rows[i].y) * 100) / 100);
+      }
+
+      // Compute second differences
+      const secondDiffs = [];
+      for (let i = 0; i < firstDiffs.length - 1; i++) {
+        secondDiffs.push(Math.round((firstDiffs[i+1] - firstDiffs[i]) * 100) / 100);
+      }
+
+      // Check classification
+      const isLinear = firstDiffs.every(d => d === firstDiffs[0]);
+      const isQuadratic = !isLinear && secondDiffs.length > 0 && secondDiffs.every(d => d === secondDiffs[0]);
+
+      for (let i = 0; i < rows.length; i++) {
+        const tr = document.createElement('tr');
+        const fd = (i < firstDiffs.length) ? firstDiffs[i] : '—';
+        const sd = (i < secondDiffs.length) ? secondDiffs[i] : '—';
+
+        tr.innerHTML = `
+          <td class="p-2 border-r text-slate-800 font-bold">${rows[i].x}</td>
+          <td class="p-2 border-r text-slate-800">${rows[i].y}</td>
+          <td class="p-2 border-r text-brand-700 font-bold">${fd}</td>
+          <td class="p-2 text-indigo-700 font-bold">${sd}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      const resDiv = document.getElementById('diffClassificationResult');
+      if (isLinear) {
+        resDiv.className = "p-2.5 bg-emerald-50 rounded-lg text-xs font-bold text-emerald-800 border border-emerald-200 text-center";
+        resDiv.textContent = `Classification: Linear (1st Difference is constant at ${firstDiffs[0]})`;
+      } else if (isQuadratic) {
+        resDiv.className = "p-2.5 bg-indigo-50 rounded-lg text-xs font-bold text-indigo-800 border border-indigo-200 text-center";
+        resDiv.textContent = `Classification: Quadratic (2nd Difference is constant at ${secondDiffs[0]})`;
+      } else {
+        resDiv.className = "p-2.5 bg-purple-50 rounded-lg text-xs font-bold text-purple-800 border border-purple-200 text-center";
+        resDiv.textContent = `Classification: Exponential or Non-polynomial (Neither 1st nor 2nd differences are constant)`;
+      }
+    }
+
+    function loadQuestionTableIntoAnalyzer() {
+      if (currentQuestionData && currentQuestionData.tableData) {
+        populateDifferencesTable(currentQuestionData.tableData);
+      } else {
+        alert("The current question does not have an attached tabular dataset.");
+      }
+    }
+
+    /* ==========================================================
+       8. TAB CONTROLLER & MODAL HELPERS
+       ========================================================== */
+    function switchTab(tab) {
+      const graphTab = document.getElementById('toolGraphTab');
+      const diffTab = document.getElementById('toolDiffTab');
+      const graphBtn = document.getElementById('tabGraphBtn');
+      const diffBtn = document.getElementById('tabDiffBtn');
+
+      if (tab === 'graph') {
+        graphTab.classList.remove('hidden');
+        diffTab.classList.add('hidden');
+        graphBtn.className = "px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm";
+        diffBtn.className = "px-3 py-1 rounded-md text-slate-500 hover:text-slate-800";
+      } else {
+        diffTab.classList.remove('hidden');
+        graphTab.classList.add('hidden');
+        diffBtn.className = "px-3 py-1 rounded-md bg-white text-slate-800 shadow-sm";
+        graphBtn.className = "px-3 py-1 rounded-md text-slate-500 hover:text-slate-800";
+      }
+    }
+
+    function toggleModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden') && window.renderMathInBody) {
+        renderMathInBody(modal);
+      }
+    }
+
+    // Initialize application on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      drawGrid();
+      startNewSession();
+    });
+  </script>
+</body>
+</html>
+```eof
+
+### Key Educational Capabilities Included
+
+1. **60-Minute Timed Exam Simulation:**
+   - Real-time countdown timer with Pause/Resume capability.
+   - 10 comprehensive curriculum-aligned questions testing table classification, slope calculation, $y = mx + b$ line determination, parallel/perpendicular conditions, rearranging equations, word problem modeling, and graphical systems/POI.
+2. **Dynamic Randomized Question Engine:**
+   - Every time you click **"New Random Session"**, the application uses math logic to dynamically generate randomized coordinates, linear equations, tables, and word scenarios.
+3. **Cheat Sheet & Step-by-Step Algorithms:**
+   - Access the modal via **"Process Cheat Sheet"** anytime for clear, step-by-step algorithms on how to solve every category (including negative reciprocal rules, isolating $y$, and the differences test).
+4. **On-Demand Hint Drawer:**
+   - Tap **"Need a Step-by-Step Hint?"** for a gentle conceptual nudge without spoiling the final answer.
+5. **Interactive Tools (Right Panel):**
+   - **Interactive Grid Grapher:** A live Cartesian coordinate canvas where you can plot questions automatically, hover to inspect coordinates, and sketch points manually.
+   - **Table Analyzer:** Automatically computes 1st differences ($\Delta y$) and 2nd differences ($\Delta^2 y$) to verify Linear vs Quadratic vs Exponential relationships.
+6. **Dedicated Anchor & Mistake Breakdown Stage:**
+   - After each answer submission, the app locks the answer, breaks down the exact algebraic steps, diagnoses common student errors (such as inverting rise/run or sign slips), and highlights the golden anchor takeaway before continuing.
